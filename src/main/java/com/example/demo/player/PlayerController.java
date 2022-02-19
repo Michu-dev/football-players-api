@@ -1,7 +1,5 @@
 package com.example.demo.player;
 
-import com.example.demo.PlayerService;
-import com.example.demo.player.Player;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +31,9 @@ public class PlayerController {
     @PutMapping(path = "{playerPesel}")
     public void updatePlayer(
             @PathVariable("playerPesel") String pesel,
-            @RequestParam String name,
-            @RequestParam String city,
-            @RequestParam String stadiumName,
-            @RequestParam(required = false) Integer capacity,
-            @RequestParam(required = false) String hasLightning,
-            @RequestParam(required = false) String hasUnderSoilHeating) {
-        playerService.updatePlayer(pesel, name, city, stadiumName, capacity, hasLightning, hasUnderSoilHeating);
+            @RequestParam(required = false) String teamName,
+            @RequestParam(required = false) Integer salary) {
+        playerService.updatePlayer(pesel, teamName, salary);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

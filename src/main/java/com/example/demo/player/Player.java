@@ -1,6 +1,5 @@
 package com.example.demo.player;
 
-import com.example.demo.Team;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -25,9 +24,9 @@ public class Player {
     private Date dateOfBirth;
     private String role;
     private String position;
-    private Team team;
+    private String team;
 
-    public Player(String pesel, String firstName, String lastName, int salary, Date dateOfBirth, String role, String position, Team team) {
+    public Player(String pesel, String firstName, String lastName, int salary, Date dateOfBirth, String role, String position, String team) {
         this.pesel = pesel;
         this.firstName = firstName;
         this.lastName = lastName;

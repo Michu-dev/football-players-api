@@ -1,15 +1,11 @@
-package com.example.demo;
+package com.example.demo.player;
 
-import com.example.demo.player.Player;
-import com.example.demo.player.PlayerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 
 @AllArgsConstructor
 @Service
@@ -42,12 +38,8 @@ public class PlayerService {
 
 
     public void updatePlayer(String pesel,
-                                 String name,
-                                 String city,
-                                 String stadiumName,
-                                 Integer capacity,
-                                 String hasLightning,
-                                 String hasUnderSoilHeating) {
+                             String newTeam,
+                             Integer newSalary) {
         Optional<Player> optionalPlayer = playerRepository.findPlayerByPesel(pesel);
 //                .orElseThrow(() -> new IllegalStateException(
 //                     "player with pesel " + pesel + " doesn't exist"));
@@ -57,47 +49,19 @@ public class PlayerService {
         }
 
         Player player = optionalPlayer.get();
-
-
         System.out.println(player + " found and modified");
 
-        Team newTeam = new Team();
-        Stadium newStadium = new Stadium();
 
-        if (name.length() > 0) {
-            newTeam.setName(name);
-        }
-
-        if (city.length() > 0) {
-            newTeam.setCity(city);
-        }
-
-        if (stadiumName.length() > 0) {
-            newStadium.setName(stadiumName);
-
-            if (capacity != null) {
-                newStadium.setCapacity(capacity);
-            }
-
-            if (hasLightning != null && (hasLightning.toLowerCase().contains("yes") || hasLightning.toLowerCase().contains("no"))) {
-                newStadium.setHasLightning(hasLightning);
-            }
-
-            if (hasUnderSoilHeating != null && (hasUnderSoilHeating.toLowerCase().contains("yes") || hasUnderSoilHeating.toLowerCase().contains("no"))) {
-                newStadium.setHasUnderSoilHeating(hasUnderSoilHeating);
-            }
-
-            newTeam.setStadium(newStadium);
-
-        }
-
-        if (name != null && city != null && stadiumName != null) {
+        if (newTeam != null && newTeam.length() > 0 && !Objects.equals(player.getTeam(), newTeam)) {
             player.setTeam(newTeam);
+        }
+
+        if (newSalary != null && !Objects.equals(player.getSalary(), newSalary)) {
+            player.setSalary(newSalary);
         }
 
         playerRepository.save(player);
 
-
-
     }
+
 }

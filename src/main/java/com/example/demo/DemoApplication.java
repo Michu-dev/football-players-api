@@ -2,6 +2,10 @@ package com.example.demo;
 
 import com.example.demo.player.Player;
 import com.example.demo.player.PlayerRepository;
+import com.example.demo.stadium.Stadium;
+import com.example.demo.stadium.StadiumRepository;
+import com.example.demo.team.Team;
+import com.example.demo.team.TeamRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +27,10 @@ public class DemoApplication {
 
 	@Bean
 	CommandLineRunner runner(
-			PlayerRepository repository, MongoTemplate mongoTemplate) {
+			PlayerRepository playerRepository,
+			TeamRepository teamRepository,
+			StadiumRepository stadiumRepository,
+			MongoTemplate mongoTemplate) {
 		return args -> {
 
 			Calendar calendar = Calendar.getInstance();
@@ -34,17 +41,19 @@ public class DemoApplication {
 			Date dateOfBirth = calendar.getTime();
 
 			String pesel = "00321112234";
+			String teamName = "Paris Saint Germain";
+			String stadiumName = "Parc des Princes";
 
 			Stadium stadium = new Stadium(
-					"Parc des Princes",
+					stadiumName,
 					47929,
 					"Yes",
 					"Yes"
 			);
 			Team team = new Team(
-					"Paris Saint Germain",
+					teamName,
 					"Paris",
-					stadium
+					stadiumName
 			);
 			Player player = new Player(
 					pesel,
@@ -54,17 +63,33 @@ public class DemoApplication {
 					dateOfBirth,
 					"player",
 					"forward",
-					team
+					teamName
 			);
 
 //			usingMongoTemplateAndQuery(repository, mongoTemplate, pesel, player);
 
-			repository.findPlayerByPesel(pesel)
+			playerRepository.findPlayerByPesel(pesel)
 					.ifPresentOrElse(s -> {
 						System.out.println(s + " already exists");
 					}, () -> {
 						System.out.println("Inserting player " + player);
-						repository.insert(player);
+						playerRepository.insert(player);
+					});
+
+			teamRepository.findTeamByName(teamName)
+					.ifPresentOrElse(s -> {
+						System.out.println(s + " already exists");
+					}, () -> {
+						System.out.println("Inserting team " + team);
+						teamRepository.insert(team);
+					});
+
+			stadiumRepository.findStadiumByName(stadiumName)
+					.ifPresentOrElse(s -> {
+						System.out.println(s + " already exists");
+					}, () -> {
+						System.out.println("Inserting stadium " + stadium);
+						stadiumRepository.insert(stadium);
 					});
 		};
 	}
