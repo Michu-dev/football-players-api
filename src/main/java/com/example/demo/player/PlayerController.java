@@ -1,6 +1,8 @@
 package com.example.demo.player;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,26 +16,30 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @GetMapping
-    public List<Player> fetchAllPlayers() {
-        return playerService.getAllPlayers();
+    public ResponseEntity<List<Player>> fetchAllPlayers() {
+        List<Player> players = playerService.getAllPlayers();
+        return new ResponseEntity<>(players, HttpStatus.OK);
     }
 
     @PostMapping
-    public void registerNewPlayer(@RequestBody Player player) {
-        playerService.addNewPlayer(player);
+    public ResponseEntity<Player> registerNewPlayer(@RequestBody Player player) {
+        Player newPlayer = playerService.addNewPlayer(player);
+        return new ResponseEntity<>(newPlayer, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "{playerPesel}")
-    public void deleteStudent(@PathVariable("playerPesel") String pesel) {
+    public ResponseEntity<?> deleteStudent(@PathVariable("playerPesel") String pesel) {
         playerService.deletePlayer(pesel);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(path = "{playerPesel}")
-    public void updatePlayer(
+    public ResponseEntity<Player> updatePlayer(
             @PathVariable("playerPesel") String pesel,
             @RequestParam(required = false) String teamName,
             @RequestParam(required = false) Integer salary) {
-        playerService.updatePlayer(pesel, teamName, salary);
+        Player player = playerService.updatePlayer(pesel, teamName, salary);
+        return new ResponseEntity<>(player, HttpStatus.OK);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

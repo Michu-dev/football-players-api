@@ -18,13 +18,13 @@ public class TeamService {
     }
 
 
-    public void addNewTeam(Team team) {
+    public Team addNewTeam(Team team) {
         Optional<Team> teamOptional = teamRepository
                 .findTeamByName(team.getName());
         if (teamOptional.isPresent()) {
             throw new IllegalStateException("Name taken");
         }
-        teamRepository.insert(team);
+        return teamRepository.insert(team);
     }
 
     public void deleteTeam(String name) {
@@ -37,7 +37,7 @@ public class TeamService {
     }
 
 
-    public void updateTeam(String name,
+    public Team updateTeam(String name,
                              String newStadium) {
         Optional<Team> optionalTeam = teamRepository.findTeamByName(name);
 
@@ -53,7 +53,7 @@ public class TeamService {
             team.setStadium(newStadium);
         }
 
-        teamRepository.save(team);
+        return teamRepository.save(team);
 
     }
 

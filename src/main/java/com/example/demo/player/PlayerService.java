@@ -18,13 +18,13 @@ public class PlayerService {
     }
 
 
-    public void addNewPlayer(Player player) {
+    public Player addNewPlayer(Player player) {
         Optional<Player> playerOptional = playerRepository
                 .findPlayerByPesel(player.getPesel());
         if (playerOptional.isPresent()) {
             throw new IllegalStateException("Pesel taken");
         }
-        playerRepository.insert(player);
+        return playerRepository.insert(player);
     }
 
     public void deletePlayer(String pesel) {
@@ -37,7 +37,7 @@ public class PlayerService {
     }
 
 
-    public void updatePlayer(String pesel,
+    public Player updatePlayer(String pesel,
                              String newTeam,
                              Integer newSalary) {
         Optional<Player> optionalPlayer = playerRepository.findPlayerByPesel(pesel);
@@ -60,7 +60,7 @@ public class PlayerService {
             player.setSalary(newSalary);
         }
 
-        playerRepository.save(player);
+        return playerRepository.save(player);
 
     }
 

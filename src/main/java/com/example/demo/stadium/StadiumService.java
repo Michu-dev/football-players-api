@@ -18,13 +18,13 @@ public class StadiumService {
     }
 
 
-    public void addNewStadium(Stadium stadium) {
+    public Stadium addNewStadium(Stadium stadium) {
         Optional<Stadium> stadiumOptional = stadiumRepository
                 .findStadiumByName(stadium.getName());
         if (stadiumOptional.isPresent()) {
             throw new IllegalStateException("Name taken");
         }
-        stadiumRepository.insert(stadium);
+        return stadiumRepository.insert(stadium);
     }
 
     public void deleteStadium(String name) {
@@ -37,7 +37,7 @@ public class StadiumService {
     }
 
 
-    public void updateStadium(String name,
+    public Stadium updateStadium(String name,
                               Integer capacity,
                               String hasLightning,
                               String hasUnderSoilHeating) {
@@ -63,7 +63,7 @@ public class StadiumService {
             stadium.setHasUnderSoilHeating(hasUnderSoilHeating);
         }
 
-        stadiumRepository.save(stadium);
+        return stadiumRepository.save(stadium);
 
     }
 
